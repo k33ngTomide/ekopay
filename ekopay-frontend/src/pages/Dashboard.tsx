@@ -10,6 +10,7 @@ import { format } from 'date-fns';
 import { toast } from 'react-toastify';
 import LargeButton from '../components/LargeButton';
 import LOGO from '../assets/ekopay_logo.png'; // Adjust the path as necessary
+import { FaEye, FaEyeSlash } from 'react-icons/fa';
 
 const GET_DASHBOARD_DATA = gql`
  query GetDashboardData {
@@ -62,17 +63,20 @@ const WITHDRAW_MUTATION = gql`
 `;
 
 const UPDATE_PIN_MUTATION = gql`
-  mutation UpdatePin($oldPin: String!, $newPin: String!) {
-    updatePin(oldPin: $oldPin, newPin: $newPin) {
-      success
+  mutation UpdatePin($updatePinInput: UpdatePinInput!) {
+    updatePin(updatePinInput: $updatePinInput) {
       message
     }
   }
 `;
 
+
 export default function Dashboard() {
 
   const { data, loading, error } = useQuery(GET_DASHBOARD_DATA);
+  const [showPin, setShowPin] = useState(false);
+  const [showOldPin, setShowOldPin] = useState(false);
+  const [showNewPin, setShowNewPin] = useState(false);
 
   const [depositMutation] = useMutation(DEPOSIT_MUTATION, {
     
@@ -105,7 +109,7 @@ export default function Dashboard() {
 
   const [updatePinMutation] = useMutation(UPDATE_PIN_MUTATION, {
     onCompleted: (data) => {
-      if (data.updatePin.success) {
+      if (data.updatePin.message === 'Wallet pin updated successfully') {
         toast.success('PIN updated successfully!');
         setDrawerOpen(false);
         resetForm();
@@ -214,8 +218,17 @@ export default function Dashboard() {
         title={drawerType === 'DEPOSIT' ? 'Deposit Funds' : drawerType === 'WITHDRAW' ? 'Withdraw Funds' : 'Update PIN'}
       >
         <div className="p-4 space-y-4">
+          <Button
+            className="absolute top-4 right-4 border bg-red-600 text-white hover:bg-red-700"
+            onClick={() => setDrawerOpen(false)}
+          >
+            <span className="text-white" onClick={() => setDrawerOpen(false)}>Close</span>
+          </Button>
           {drawerType === 'DEPOSIT' && (
             <>
+              <h1
+                className="text-xl font-light mb-4 font-montserrat"
+              >Deposit funds to your account</h1>
               <label className="block mb-2 text-sm font-medium">Amount</label>
               <input
                 type="number"
@@ -230,6 +243,9 @@ export default function Dashboard() {
 
           {drawerType === 'WITHDRAW' && (
             <>
+              <h1
+                className="text-xl font-light mb-4 font-montserrat"
+              >Withdraw funds from account</h1>
               <label className="block mb-2 text-sm font-medium">Amount</label>
               <input
                 type="number"
@@ -241,40 +257,65 @@ export default function Dashboard() {
               />
 
               <label className="block mb-2 text-sm font-medium">PIN</label>
-              <input
-                type="password"
-                name="pin"
-                value={form.pin}
-                onChange={(e) => setForm({ ...form, pin: e.target.value })}
-                className="w-full border rounded px-4 py-2"
-                placeholder="Enter your PIN"
-                autoSave='off'
-                autoComplete='off'
-              />
+              <div className="relative">
+                <input
+                  type={showPin ? "text" : "password"}
+                  name="pin"
+                  value={form.pin}
+                  onChange={(e) => setForm({ ...form, pin: e.target.value })}
+                  className="w-full border rounded px-4 py-2 pr-10"
+                  placeholder="Enter your PIN"
+                  autoSave='off'
+                  autoComplete='off'
+                />
+                <span
+                  className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowPin(!showPin)}
+                >
+                  {showPin ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
             </>
           )}
 
           {drawerType === 'UPDATE_PIN' && (
             <>
-              <label className="block mb-2 text-sm font-medium">Current PIN</label>
-              <input
-                type="password"
-                name="oldPin"
-                value={form.oldPin}
-                onChange={(e) => setForm({ ...form, oldPin: e.target.value })}
-                className="w-full border rounded px-4 py-2"
-                placeholder="Enter current PIN"
-              />
+              <label className="block mb-2 text-sm font-medium">Current/Default PIN</label>
+              <div className="relative">
+                <input
+                  type={showOldPin ? "text" : "password"}
+                  name="oldPin"
+                  value={form.oldPin}
+                  onChange={(e) => setForm({ ...form, oldPin: e.target.value })}
+                  className="w-full border rounded px-4 py-2 pr-10"
+                  placeholder="Enter current or default PIN"
+                />
+                <span
+                  className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowOldPin(!showOldPin)}
+                >
+                  {showOldPin ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
+              <p className='text-[12px] text-gray-500'>Enter 0000 as a default pin</p>
 
               <label className="block mb-2 text-sm font-medium">New PIN</label>
-              <input
-                type="password"
-                name="newPin"
-                value={form.newPin}
-                onChange={(e) => setForm({ ...form, newPin: e.target.value })}
-                className="w-full border rounded px-4 py-2"
-                placeholder="Enter new PIN"
-              />
+              <div className="relative">
+                <input
+                  type={showNewPin ? "text" : "password"}
+                  name="newPin"
+                  value={form.newPin}
+                  onChange={(e) => setForm({ ...form, newPin: e.target.value })}
+                  className="w-full border rounded px-4 py-2 pr-10"
+                  placeholder="Enter new PIN"
+                />
+                <span
+                  className="absolute right-3 top-3 text-gray-500 cursor-pointer"
+                  onClick={() => setShowNewPin(!showNewPin)}
+                >
+                  {showNewPin ? <FaEyeSlash /> : <FaEye />}
+                </span>
+              </div>
             </>
           )}
 
@@ -289,7 +330,15 @@ export default function Dashboard() {
                 withdrawMutation({ variables: { amount: parseFloat(form.amount), pin: form.pin } });
               } else if (drawerType === 'UPDATE_PIN') {
                 if (!form.oldPin || !form.newPin) return toast.info('Fill in both PIN fields.');
-                updatePinMutation({ variables: { oldPin: form.oldPin, newPin: form.newPin } });
+                updatePinMutation({
+                  variables: {
+                    updatePinInput: {
+                      formerPin: form.oldPin,
+                      newPin: form.newPin
+                    }
+                  }
+                });
+
               }
             }}
           >
