@@ -199,4 +199,4 @@ git push -u origin main
 ## ✍️ Links
 
 Backend Link: https://ekopay.onrender.com
-Frontend Link: 
+Frontend Link: https://ekopay.vercel.app

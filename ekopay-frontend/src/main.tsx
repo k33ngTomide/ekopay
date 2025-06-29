@@ -14,7 +14,7 @@ import './index.css';
 import { getAuthToken } from './store/auth'; // import the function
 
 const httpLink = createHttpLink({
-  uri: process.env.VITE_BACKEND_URL || 'http://localhost:3000/graphql',
+  uri: import.meta.env.VITE_BACKEND_URL || 'http://localhost:3000/graphql',
 });
 
 const authLink = setContext((_, { headers }) => {
