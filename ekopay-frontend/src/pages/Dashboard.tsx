@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 // src/pages/Dashboard.tsx
 import { useAuthStore } from '../store/auth';
 import { useNavigate } from 'react-router-dom';
@@ -184,7 +185,7 @@ export default function Dashboard() {
       <div className="bg-white rounded-2xl p-6 shadow-md">
         <h3 className="text-lg font-bold mb-4">Recent Transactions</h3>
         <ul className="space-y-3">
-          {walletByUser.transactionHistory.slice(0, 5).map(txn => (
+          {walletByUser.transactionHistory.slice(0, 5).map((txn : any) => (
             <li key={txn._id} className="flex justify-between text-sm border-b pb-2">
               <span className={`font-medium ${txn.type === 'DEPOSIT' ? 'text-green-600' : 'text-red-600'}`}>{txn.type}</span>
               <span>₦{txn.amount.toLocaleString()}</span>
