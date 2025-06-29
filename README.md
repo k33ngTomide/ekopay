@@ -200,3 +200,8 @@ git push -u origin main
 
 Backend Link: https://ekopay.onrender.com
 Frontend Link: https://ekopay.vercel.app
+
+![Login Page](./ekopay-frontend/src/assets/login.png)
+![SignUp Page](./ekopay-frontend/src/assets/signup.png)
+![Dashboard Page](./ekopay-frontend/src/assets/dashboard.png)
+![Transaction Page](./ekopay-frontend/src/assets/transactions.png)

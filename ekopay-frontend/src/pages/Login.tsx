@@ -25,7 +25,7 @@ export default function Login() {
 
   const [login, { loading }] = useMutation(LOGIN, {
     onCompleted: (data) => {
-      toast.success(`Welcome back, ${data.login.user.fullName}`);
+      toast.success(`Welcome back, ${data.login.user.email}`);
       setToken(data.login.accessToken);
       navigate('/dashboard');
     },
