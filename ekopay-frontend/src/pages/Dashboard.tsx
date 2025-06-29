@@ -1,7 +1,7 @@
 // src/pages/Dashboard.tsx
 import { useAuthStore } from '../store/auth';
 import { useNavigate } from 'react-router-dom';
-import React, { useEffect, useState } from 'react';
+import {useState } from 'react';
 import Button from '../components/Button';
 import Drawer from '../components/Drawer';
 import { useQuery, useMutation, gql } from '@apollo/client';

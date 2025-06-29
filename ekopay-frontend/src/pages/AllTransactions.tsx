@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { gql, useQuery } from '@apollo/client';
 import { format } from 'date-fns';
 import { toast } from 'react-toastify';
