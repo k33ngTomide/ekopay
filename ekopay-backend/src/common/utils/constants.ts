@@ -1,0 +1,9 @@
+export const SUCCESSFUL_WALLET_MESSAGE = 'Wallet created successfully';
+export const PIN_UPDATED_SUCCESSFULLY = 'Wallet pin updated successfully';
+export const SAME_PIN_ERROR = 'New pin and Current pin are the same';
+export const INCORRECT_CURRENT_PIN = 'Incorrect Current pin';
+export const USER_NOT_FOUND = 'User not found';
+export const WALLET_NOT_FOUND = 'Wallet not found';
+export const INCORRECT_PIN = 'Incorrect Pin';
+export const INSUFFICIENT_FUND = 'Insufficient fund';
+export const INVALID_ZERO_AMOUNT = 'Amount must be greater then zero';

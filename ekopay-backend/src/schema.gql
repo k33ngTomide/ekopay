@@ -1,0 +1,93 @@
+# ------------------------------------------------------
+# THIS FILE WAS AUTOMATICALLY GENERATED (DO NOT MODIFY)
+# ------------------------------------------------------
+
+type User {
+  _id: ID!
+  fullName: String!
+  email: String!
+  phone: String!
+  profilePicture: String
+  createdAt: DateTime!
+  updatedAt: DateTime!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Transaction {
+  _id: ID!
+  wallet: Wallet!
+  type: String!
+  amount: Float!
+  createdAt: DateTime!
+}
+
+type Wallet {
+  _id: ID!
+  accountNumber: String!
+  pin: String!
+  balance: Float!
+  user: User!
+  transactions: [Transaction!]
+  createdAt: DateTime!
+}
+
+type LoginResponse {
+  accessToken: String!
+  user: User!
+}
+
+type WalletResponse {
+  message: String!
+  wallet: Wallet!
+}
+
+type WalletByUserResponse {
+  wallet: Wallet!
+  transactionHistory: [Transaction!]!
+}
+
+type Query {
+  me: User!
+  users: [User!]!
+  myWallet: Wallet!
+  walletByUser: WalletByUserResponse!
+  transactions: [Transaction!]!
+}
+
+type Mutation {
+  createUser(createUserInput: CreateUserInput!): User!
+  login(loginInput: LoginInput!): LoginResponse!
+  deposit(depositInput: DepositInput!): WalletResponse!
+  withdraw(withdrawInput: WithdrawInput!): WalletResponse!
+  updatePin(updatePinInput: UpdatePinInput!): WalletResponse!
+}
+
+input CreateUserInput {
+  fullName: String!
+  email: String!
+  phone: String!
+  password: String!
+}
+
+input LoginInput {
+  credential: String!
+  password: String!
+}
+
+input DepositInput {
+  amount: Float!
+}
+
+input WithdrawInput {
+  amount: Float!
+  pin: String!
+}
+
+input UpdatePinInput {
+  formerPin: String!
+  newPin: String!
+}
