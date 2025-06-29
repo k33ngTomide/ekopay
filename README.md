@@ -1,2 +1,1 @@
-# ekopay
-a payment system
+
